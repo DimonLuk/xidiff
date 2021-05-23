@@ -34,12 +34,12 @@ def get_train_step(
         with tf.GradientTape() as loss_gr:
             loss_gr.watch(model.trainable_variables)
 
-            with XiDiffGradientManager(xs, model.equation) as gradients:
+            with XiDiffGradientManager(xs, model.equation) as xidiff_gradients:
                 result = model(xs, training=True)
 
             # member is actually present
             # pylint: disable=no-member
-            derivatives = gradients.batch_jacobians(result)
+            derivatives = xidiff_gradients.batch_jacobians(result)
 
             # calculate losses
             loss_real = tf.convert_to_tensor(

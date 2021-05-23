@@ -13,6 +13,7 @@ from xidiff import (XiDiffEquation, XiDiffModelWrapper, XiDiffSolver,
 
 @dataclass
 class EquationModuleContent:
+    # pylint: disable=too-many-instance-attributes
     function_r: Callable[..., List[tf.Tensor]]
     function_i: Callable[..., List[tf.Tensor]]
     boundary_function: Callable[..., tf.Tensor]
