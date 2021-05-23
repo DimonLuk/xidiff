@@ -28,6 +28,7 @@ class EquationModuleContent:
 
 
 MODEL: Optional[XiDiffModelWrapper] = None
+MODEL_RESULTS: List = []
 PATH_TO_MODEL = Path("model")
 
 
@@ -100,11 +101,12 @@ def evaluate_model(
 ) -> None:
     # pylint: disable=global-statement
     global MODEL
+    global MODEL_RESULTS
     if MODEL is not None:
-        MODEL(*equation_data.evaluation_point_numpy)
-        MODEL(equation_data.evaluation_range_numpy)
-        MODEL(equation_data.evaluation_point_tensorflow)
-        MODEL(equation_data.evaluation_range_tensorflow)
+        MODEL_RESULTS.append(MODEL(*equation_data.evaluation_point_numpy))
+        MODEL_RESULTS.append(MODEL(equation_data.evaluation_range_numpy))
+        MODEL_RESULTS.append(MODEL(equation_data.evaluation_point_tensorflow))
+        MODEL_RESULTS.append(MODEL(equation_data.evaluation_range_tensorflow))
     else:
         assert False, "MODEL must be present"
 
@@ -127,6 +129,31 @@ def restore_model() -> None:
     MODEL = XiDiffModelWrapper.load(PATH_TO_MODEL)
 
 
-@then("it is possible to remove saved model")
-def remove_saved_model() -> None:
+@then("it is possible to evaluate model with the same results")
+def re_evaluate_model(equation_data: EquationModuleContent) -> None:
+    # pylint: disable=global-statement
+    global MODEL
+    global MODEL_RESULTS
+    results = []
+    if MODEL is not None:
+        results.append(MODEL(*equation_data.evaluation_point_numpy))
+        results.append(MODEL(equation_data.evaluation_range_numpy))
+        results.append(MODEL(equation_data.evaluation_point_tensorflow))
+        results.append(MODEL(equation_data.evaluation_range_tensorflow))
+        assert (results[0] == MODEL_RESULTS[0]).all()
+        assert (results[1] == MODEL_RESULTS[1]).all()
+        assert (results[2] == MODEL_RESULTS[2]).all()
+        assert (results[3] == MODEL_RESULTS[3]).all()
+    else:
+        assert False, "MODEL must be present"
+
+
+@then("clean up")
+def clean_up() -> None:
+    # pylint: disable=global-statement
+    global MODEL
+    global MODEL_RESULTS
+
     shutil.rmtree(PATH_TO_MODEL)
+    MODEL = None
+    MODEL_RESULTS = []

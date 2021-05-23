@@ -12,5 +12,5 @@ Feature: approximate equation
         Then it is possible to evaluate model
         And it is possible to save model
         And it is possible to restore model
-        And it is possible to evaluate model
-        And it is possible to remove saved model
+        And it is possible to evaluate model with the same results
+        And clean up
