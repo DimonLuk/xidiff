@@ -1,7 +1,7 @@
 # pylint: disable=redefined-outer-name
 import importlib
 from dataclasses import dataclass
-from typing import Callable, List, Tuple
+from typing import Callable, List, Tuple, Optional
 
 import numpy as np
 import tensorflow as tf
@@ -22,6 +22,9 @@ class EquationModuleContent:
     evaluation_range_numpy: np.array
     evaluation_point_tensorflow: tf.Tensor
     evaluation_range_tensorflow: tf.Tensor
+
+
+MODEL: Optional[XiDiffModelWrapper] = None
 
 
 @scenario("features/basic_functionality.feature",
@@ -81,13 +84,20 @@ def xidiff_solver(xidiff_equation: XiDiffEquation) -> XiDiffSolver:
 
 
 @when("xidiff solver approximated the equation")
-def xidiff_model(xidiff_solver: XiDiffSolver) -> XiDiffModelWrapper:
-    return xidiff_solver.approximate()
+def xidiff_model(xidiff_solver: XiDiffSolver) -> None:
+    #pylint: disable=global-statement
+    global MODEL
+    MODEL = xidiff_solver.approximate()
 
 
 @then("it is possible to evaluate model")
-def evaluate_model(equation_data: EquationModuleContent) -> None:
-    xidiff_model(equation_data.evaluation_point_numpy)
-    xidiff_model(equation_data.evaluation_range_numpy)
-    xidiff_model(equation_data.evaluation_point_tensorflow)
-    xidiff_model(equation_data.evaluation_range_tensorflow)
+def evaluate_model(
+    equation_data: EquationModuleContent,
+) -> None:
+    #pylint: disable=global-statement
+    global MODEL
+    if MODEL is not None:
+        MODEL(*equation_data.evaluation_point_numpy)
+        MODEL(equation_data.evaluation_range_numpy)
+        MODEL(equation_data.evaluation_point_tensorflow)
+        MODEL(equation_data.evaluation_range_tensorflow)
