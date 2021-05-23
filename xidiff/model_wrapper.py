@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from os import PathLike
-from typing import TYPE_CHECKING, Literal, Sequence, Type, Union
+from pathlib import Path
+from typing import Literal, Sequence, Type, Union
 
 import numpy as np
 import tensorflow as tf
 
-if TYPE_CHECKING:
-    from xidiff.model import XiDiffModel
+from xidiff.model import XiDiffModel
 
 OutputDataStyle = Literal["numpy", "tensorflow"]
 
@@ -26,8 +25,7 @@ class XiDiffModelWrapper:
     ) -> Union[np.array, tf.Tensor]:
         if np.array(values).shape == (len(self._model.equation.variables),):
             return self.evaluate_at(*values, style=style)
-        else:
-            return self.evaluate_range(values[0], style=style)
+        return self.evaluate_range(values[0], style=style)
 
     def evaluate_at(
         self: XiDiffModelWrapper,
@@ -39,8 +37,7 @@ class XiDiffModelWrapper:
         if style == "numpy":
             result = result.numpy()
             return result[0]
-        elif style == "tensorflow":
-            return result
+        return result
 
     def evaluate_range(
         self: XiDiffModelWrapper,
@@ -53,19 +50,20 @@ class XiDiffModelWrapper:
         result = self._model(values)
         if style == "numpy":
             return result.numpy()
-        elif style == "tensorflow":
-            return result
+        return result
 
     def save(
         self: XiDiffModelWrapper,
-        path: PathLike
+        dir_path: Path,
     ) -> None:
-        self._model.save(path)
+        dir_path.mkdir(parents=True, exist_ok=True)
+
+        self._model.save(dir_path)
 
     @classmethod
     def load(
         cls: Type[XiDiffModelWrapper],
-        path: PathLike
+        dir_path: Path,
     ) -> XiDiffModelWrapper:
-        tf_model = tf.keras.models.load_model(path)
-        return cls(tf_model)
+        model = XiDiffModel.load(dir_path)
+        return XiDiffModelWrapper(model)

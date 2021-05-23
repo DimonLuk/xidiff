@@ -1,6 +1,8 @@
 # pylint: disable=redefined-outer-name
 import importlib
+import shutil
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Callable, List, Optional, Tuple
 
 import numpy as np
@@ -26,6 +28,7 @@ class EquationModuleContent:
 
 
 MODEL: Optional[XiDiffModelWrapper] = None
+PATH_TO_MODEL = Path("model")
 
 
 @scenario("features/basic_functionality.feature",
@@ -102,3 +105,28 @@ def evaluate_model(
         MODEL(equation_data.evaluation_range_numpy)
         MODEL(equation_data.evaluation_point_tensorflow)
         MODEL(equation_data.evaluation_range_tensorflow)
+    else:
+        assert False, "MODEL must be present"
+
+
+@then("it is possible to save model")
+def save_model() -> None:
+    # pylint: disable=global-statement
+    global MODEL
+    if MODEL is not None:
+        MODEL.save(PATH_TO_MODEL)
+        MODEL = None
+    else:
+        assert False, "MODEL must be present"
+
+
+@then("it is possible to restore model")
+def restore_model() -> None:
+    # pylint: disable=global-statement
+    global MODEL
+    MODEL = XiDiffModelWrapper.load(PATH_TO_MODEL)
+
+
+@then("it is possible to remove saved model")
+def remove_saved_model() -> None:
+    shutil.rmtree(PATH_TO_MODEL)

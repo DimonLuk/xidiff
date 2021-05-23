@@ -2,7 +2,7 @@
 
 mypy .
 
-project_files=($(ls xidiff/**/*.py))
+project_files=($(ls xidiff/*.py))
 test_files=($(ls tests/*.py))
 python_files=("${project_files[@]}" "${test_files[@]}")
 

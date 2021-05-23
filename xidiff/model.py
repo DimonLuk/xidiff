@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+from pathlib import Path
+from typing import Type
+
 import tensorflow as tf
 
 from xidiff.equation import XiDiffEquation
 
 
+# pylint: disable=too-many-ancestors
 class XiDiffModel(tf.keras.Model):
     def __init__(
         self: XiDiffModel,
@@ -29,3 +33,26 @@ class XiDiffModel(tf.keras.Model):
         for layer in self.hidden_layers:
             x = layer(x)
         return self.output_layer(x)
+
+    def save(
+        self: XiDiffModel,
+        dir_path: Path
+    ) -> None:
+        model_path = dir_path / "model.tf"
+        super().save(model_path)
+
+        self.equation.save(dir_path)
+
+    @classmethod
+    def load(
+        cls: Type[XiDiffModel],
+        dir_path: Path,
+    ) -> XiDiffModel:
+        equation = XiDiffEquation.load(dir_path)
+
+        model_path = dir_path / "model.tf"
+
+        model = tf.keras.models.load_model(model_path)
+        model.equation = equation
+
+        return model

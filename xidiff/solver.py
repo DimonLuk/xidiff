@@ -12,7 +12,9 @@ from xidiff.train_step import get_train_step
 
 
 class XiDiffSolver:
+    # pylint: disable=too-few-public-methods
     def __init__(
+        #pylint: disable=too-many-arguments
         self: XiDiffSolver,
         equation: XiDiffEquation,
         epochs: int = 50_000,
@@ -49,7 +51,8 @@ class XiDiffSolver:
 
             losses_result = self.losses_metric.result().numpy()
 
-            if np.floor(np.log10(np.abs(losses_result))) <= self.target_loss_exponent:
+            if np.floor(np.log10(np.abs(losses_result))
+                        ) <= self.target_loss_exponent:
                 success_counter += 1
 
             if success_counter == 1000:
@@ -58,5 +61,5 @@ class XiDiffSolver:
                 f"Epoch: {epoch + 1}\n"
                 f"Loss: {losses_result}"
             )
-            print("-"*50)
+            print("-" * 50)
         return XiDiffModelWrapper(model)
