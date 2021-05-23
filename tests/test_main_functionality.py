@@ -32,7 +32,7 @@ MODEL_RESULTS: List = []
 PATH_TO_MODEL = Path("model")
 
 
-@scenario("features/basic_functionality.feature",
+@scenario("features/main_functionality.feature",
           "should approximate equation")
 def test_should_approximate_equation() -> None:
     pass
