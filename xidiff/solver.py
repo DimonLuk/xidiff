@@ -22,6 +22,7 @@ class XiDiffSolver:
         losses_metric: Optional[tf.keras.metrics.Metric] = None,
         model_class: Type[XiDiffModel] = XiDiffModel,
         target_loss_exponent: int = -6,
+        print_info: bool = False,
     ) -> None:
         self.equation = equation
         self.epochs = epochs
@@ -38,6 +39,7 @@ class XiDiffSolver:
 
         self.model_class = model_class
         self.target_loss_exponent = target_loss_exponent
+        self.print_info = print_info
 
     def approximate(self: XiDiffSolver) -> XiDiffModelWrapper:
         values = self.equation.variables.get_tensor_values()
@@ -57,9 +59,13 @@ class XiDiffSolver:
 
             if success_counter == 1000:
                 break
+            self._print(epoch, losses_result)
+        return XiDiffModelWrapper(model)
+
+    def _print(self, epoch, losses_result):
+        if self.print_info:
             print(
                 f"Epoch: {epoch + 1}\n"
                 f"Loss: {losses_result}"
             )
             print("-" * 50)
-        return XiDiffModelWrapper(model)
