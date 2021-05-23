@@ -4,7 +4,6 @@ project_files=($(ls xidiff/**/*.py))
 test_files=($(ls tests/*.py))
 python_files=("${project_files[@]}" "${test_files[@]}")
 
-echo ${python_files[3]}
 for python_file in ${python_files[@]};
 do
     echo "Prettifying ${python_file}"

@@ -6,6 +6,7 @@ from typing import Callable, List, Tuple
 import numpy as np
 import tensorflow as tf
 from pytest_bdd import given, scenario, then, when
+
 from xidiff import (XiDiffEquation, XiDiffModelWrapper, XiDiffSolver,
                     XiDiffVariables)
 
