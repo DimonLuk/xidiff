@@ -46,6 +46,8 @@ VARIABLE_RANGES: Final[List[Tuple[float, float]]] = [(1, 2), (1, 2)]
 
 NUMBER_OF_FUNCTIONS: Final[int] = 1
 
+ORDER_OF_SYSTEM: Final[int] = 2
+
 EVALUATION_POINT_NUMPY: Final[List[int]] = [1, 1]
 
 EVALUATION_RANGE_NUMPY: Final[np.array] = np.array([[1, 1], [1.5, 1.5]])

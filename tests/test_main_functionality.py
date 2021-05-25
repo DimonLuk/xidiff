@@ -21,6 +21,7 @@ class EquationModuleContent:
     boundary_function: Callable[..., tf.Tensor]
     variable_ranges: List[Tuple[float, float]]
     number_of_functions: int
+    order_of_system: int
     evaluation_point_numpy: List
     evaluation_range_numpy: np.array
     evaluation_point_tensorflow: tf.Tensor
@@ -56,6 +57,7 @@ def equation_data(equation: str) -> EquationModuleContent:
         boundary_function=getattr(module, "boundary_function"),
         variable_ranges=getattr(module, "VARIABLE_RANGES"),
         number_of_functions=getattr(module, "NUMBER_OF_FUNCTIONS"),
+        order_of_system=getattr(module, "ORDER_OF_SYSTEM"),
         evaluation_point_numpy=getattr(module, "EVALUATION_POINT_NUMPY"),
         evaluation_range_numpy=getattr(module, "EVALUATION_RANGE_NUMPY"),
         evaluation_point_tensorflow=getattr(
@@ -81,6 +83,7 @@ def xidiff_equation(
         equation_data.boundary_function,
         equation_data.number_of_functions,
         xidiff_variables,
+        equation_data.order_of_system,
     )
 
 

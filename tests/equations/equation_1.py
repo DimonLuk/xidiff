@@ -1,4 +1,5 @@
-#pylint: disable=invalid-name
+# pylint: disable=invalid-name
+# pylint: disable=unused-argument
 from typing import Final, List, Tuple
 
 import numpy as np
@@ -7,10 +8,9 @@ import tensorflow as tf
 
 def function_r(
     xs: tf.Tensor,
-    # pylint: disable=unused-argument
     fs: tf.Tensor,
     dfs: tf.Tensor,
-):
+) -> List[tf.Tensor]:
     return [
         dfs[:, 0, 0] - xs[:, 0]
     ]
@@ -18,10 +18,9 @@ def function_r(
 
 def function_i(
     xs: tf.Tensor,
-    # pylint: disable=unused-argument
     fs: tf.Tensor,
     dfs: tf.Tensor,
-):
+) -> List[tf.Tensor]:
     return [
         dfs[:, 1, 0] - xs[:, 0]
     ]
@@ -39,6 +38,8 @@ def boundary_function(tf_model: tf.keras.models.Model) -> tf.Tensor:
 VARIABLE_RANGES: Final[List[Tuple[float, float]]] = [(-2, 2)]
 
 NUMBER_OF_FUNCTIONS: Final[int] = 1
+
+ORDER_OF_SYSTEM: Final[int] = 1
 
 EVALUATION_POINT_NUMPY: Final[List[int]] = [1]
 

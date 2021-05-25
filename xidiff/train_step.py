@@ -44,12 +44,14 @@ def get_train_step(
             # calculate losses
             loss_real = tf.convert_to_tensor(
                 model.equation.real_function(xs, result, *derivatives))
-            loss_real = tf.reshape(loss_real, xs.shape)
+            loss_real = tf.reshape(
+                loss_real, (xs.shape[0], model.equation.order_of_system))
             loss_real = tf.square(loss_real)
 
             loss_imaginary = tf.convert_to_tensor(
                 model.equation.imaginary_function(xs, result, *derivatives))
-            loss_imaginary = tf.reshape(loss_imaginary, xs.shape)
+            loss_imaginary = tf.reshape(
+                loss_imaginary, (xs.shape[0], model.equation.order_of_system))
             loss_imaginary = tf.square(loss_imaginary)
 
             loss = tf.reduce_mean(loss_real + loss_imaginary)

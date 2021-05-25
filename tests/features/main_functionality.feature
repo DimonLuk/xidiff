@@ -19,3 +19,4 @@ Feature: approximate equation
         | equation   |
         | equation_0 |
         | equation_1 |
+        | equation_2 |

@@ -24,6 +24,7 @@ class XiDiffEquation:
         boundary_conditions_function: XiDiffFunction,
         unknown_functions: int,
         variables: XiDiffVariables,
+        order_of_system: int,
     ) -> None:
         self.real_function = real_function
         self.imaginary_function = imaginary_function
@@ -31,6 +32,7 @@ class XiDiffEquation:
         self.unknown_functions = unknown_functions
         self.variables = variables
         self.highest_order_derivative = self._init_highest_order_derivative()
+        self.order_of_system = order_of_system
 
     def _init_highest_order_derivative(self: XiDiffEquation) -> int:
         arguments_length = len(inspect.getfullargspec(self.real_function).args)

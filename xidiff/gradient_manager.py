@@ -41,5 +41,6 @@ class XiDiffGradientManager(contextlib.ExitStack):
             if not derivatives:
                 derivatives.append(tape.batch_jacobian(result, self.xs))
             else:
-                derivatives.append(tape.batch_jacobian(result[-1], self.xs))
+                derivatives.append(tape.batch_jacobian(
+                    derivatives[-1], self.xs))
         return derivatives
