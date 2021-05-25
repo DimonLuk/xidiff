@@ -90,7 +90,7 @@ def xidiff_equation(
 @given("xidff solver is intia1ized", target_fixture="xidiff_solver")
 def xidiff_solver(xidiff_equation: XiDiffEquation) -> XiDiffSolver:
     return XiDiffSolver(
-        xidiff_equation, target_loss_exponent=-2, print_info=True,
+        xidiff_equation, target_loss_exponent=-2,
     )
 
 
@@ -98,6 +98,7 @@ def xidiff_solver(xidiff_equation: XiDiffEquation) -> XiDiffSolver:
 def xidiff_model(xidiff_solver: XiDiffSolver) -> None:
     # pylint: disable=global-statement
     global MODEL
+    assert MODEL is None
     MODEL = xidiff_solver.approximate()
 
 
@@ -108,6 +109,9 @@ def evaluate_model(
     # pylint: disable=global-statement
     global MODEL
     global MODEL_RESULTS
+
+    assert MODEL_RESULTS == []
+
     if MODEL is not None:
         MODEL_RESULTS.append(MODEL(*equation_data.evaluation_point_numpy))
         MODEL_RESULTS.append(MODEL(equation_data.evaluation_range_numpy))
