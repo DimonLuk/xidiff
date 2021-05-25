@@ -7,3 +7,4 @@ pytest
 pytest-bdd
 debugpy
 setuptools
+pytest-cov
