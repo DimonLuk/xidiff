@@ -41,6 +41,6 @@ jobs:
           name: codecov
           fail_ci_if_error: true
       - name: Build python package
-        if: ${{ github.ref == 'refs/heads/master' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           python setup.py bdist_wheel
