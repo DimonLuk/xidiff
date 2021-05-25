@@ -32,21 +32,24 @@ MODEL_RESULTS: List = []
 PATH_TO_MODEL = Path("model")
 
 
-@scenario("features/main_functionality.feature",
-          "should approximate equation")
+@scenario(
+    "features/main_functionality.feature",
+    "should approximate equation",
+    example_converters={"equation": str},
+)
 def test_should_approximate_equation() -> None:
     pass
 
 
 @given(
     (
-        "real part of equation, imaginary part of equation"
-        ", boundary conditions and variable ranges"
+        "real part, imaginary part, boundary conditions"
+        " and variable ranges of <equation>"
     ),
     target_fixture="equation_data"
 )
-def equation_data() -> EquationModuleContent:
-    module = importlib.import_module("tests.equations.equation_0")
+def equation_data(equation: str) -> EquationModuleContent:
+    module = importlib.import_module(f"tests.equations.{equation}")
     return EquationModuleContent(
         function_r=getattr(module, "function_r"),
         function_i=getattr(module, "function_i"),
@@ -84,7 +87,7 @@ def xidiff_equation(
 @given("xidff solver is intia1ized", target_fixture="xidiff_solver")
 def xidiff_solver(xidiff_equation: XiDiffEquation) -> XiDiffSolver:
     return XiDiffSolver(
-        xidiff_equation, target_loss_exponent=-2
+        xidiff_equation, target_loss_exponent=-2, print_info=True,
     )
 
 
